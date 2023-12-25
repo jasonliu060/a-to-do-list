@@ -8,19 +8,41 @@
 
 <body>
   <a href="./todolist.html">to do list</a>
-  <h1>Calendar</h1>
-  <button class="last-month js-last-month">
-    < </button>
-      <button class="next-month js-next-month"> > </button>
-      <div class="month-year js-month-year"></div>
-      <div class="dates js-dates" style="
+  <h1>Month Calendar</h1>
+  <button class="last-month js-last-month">&larr;</button>
+  <button class="next-month js-next-month">&rarr;</button>
+  <div class="month-year js-month-year"></div>
+  <div class="dates js-dates" style="
   display: grid;
   grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   width: 300px;">
-      </div>
+  </div>
 
-      <script type="module" src="scripts/calendar.js">
-      </script>
+  <h1>Week Calendar</h1>
+  <button class="last-week js-last-week">&larr;</button>
+  <button class="next-week js-next-week">&rarr;</button>
+  <div class="date-month-year-range js-date-month-year-range"></div>
+  <table>
+    <tr>
+      <th>Sun</th>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
+      <th>Sat</th>
+    </tr>
+    <tr class="week-calendar-date js-week-calendar-date">
+    </tr>
+    <tr>
+      
+    </tr>
+  </table>
+
+
+
+  <script type="module" src="scripts/calendar.js">
+  </script>
 </body>
 
 <!-- 
