@@ -1,3 +1,6 @@
+const theList = JSON.parse(localStorage.getItem('theList'));
+console.log(theList);
+
 const today = new Date();
 const curYear = today.getFullYear();
 const curMonthNum = today.getMonth();
@@ -23,6 +26,7 @@ document.querySelector('.js-next-month').addEventListener('click', () => {
 
 displayMonthCalendar(curYear, curMonthNum, curDate, curDay);
 displayWeekCalendar(curYear, curMonthNum, curDate, curDay);
+displayDaySchedule(curYear, curMonthNum, curDate, curDay);
 
 // input: month(number format) 
 // output: number of days in the month
@@ -94,4 +98,23 @@ function displayWeekCalendar(year, month, date, day) {
     html += `<th>${oneDay.getDate()}</th>`;
   }
   document.querySelector('.js-week-calendar-date').innerHTML = html;
+}
+
+
+// enable using < > to move day schedule to last day and next day
+const dayScheduleDateObj = new Date();
+document.querySelector('.js-last-day').addEventListener('click', () => {
+  dayScheduleDateObj.setFullYear(dayScheduleDateObj.getFullYear(), dayScheduleDateObj.getMonth(), dayScheduleDateObj.getDate() - 1);
+  console.log(dayScheduleDateObj);
+  displayDaySchedule(dayScheduleDateObj.getFullYear(), dayScheduleDateObj.getMonth(), dayScheduleDateObj.getDate(), dayScheduleDateObj.getDay());
+})
+document.querySelector('.js-next-day').addEventListener('click', () => {
+  dayScheduleDateObj.setFullYear(dayScheduleDateObj.getFullYear(), dayScheduleDateObj.getMonth(), dayScheduleDateObj.getDate() + 1);
+  console.log(dayScheduleDateObj);
+  displayDaySchedule(dayScheduleDateObj.getFullYear(), dayScheduleDateObj.getMonth(), dayScheduleDateObj.getDate(), dayScheduleDateObj.getDay());
+})
+
+// display day schedule
+function displayDaySchedule(year, month, date, day){
+  document.querySelector('.js-day-of-day-schedule').innerHTML = `${date} ${months[month]} ${year}`;
 }
