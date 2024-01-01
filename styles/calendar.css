@@ -1,0 +1,27 @@
+.js-dates-row:hover {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  background-color: blue;
+}
+
+.js-dates-row {
+  background-color: lightblue;
+}
+
+.js-dates-row span{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.js-month-calendar-date-element:hover {
+  background-color: lightcoral;
+}
+
+/* .month-calendar {
+  display: none;
+} */
+
+.js-week-calendar-row span{
+  padding-left: 10px;
+  padding-right: 10px;
+}

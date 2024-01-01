@@ -11,26 +11,51 @@ const curDay = today.getDay();
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 
+// switch between month -> 0 / week -> 1 / day -> 2
+let calendarSwitcher = 0;
+function selectCalendar() {
+  switch (calendarSwitcher) {
+    case 0:
+      document.querySelector('.month-calendar').style.display = 'block';
+      document.querySelector('.week-calendar').style.display = 'none';
+      document.querySelector('.day-schedule').style.display = 'none';
+      break;
+    case 1:
+      document.querySelector('.month-calendar').style.display = 'none';
+      document.querySelector('.week-calendar').style.display = 'block';
+      document.querySelector('.day-schedule').style.display = 'none';
+      break;
+    case 2:
+      document.querySelector('.month-calendar').style.display = 'none';
+      document.querySelector('.week-calendar').style.display = 'none';
+      document.querySelector('.day-schedule').style.display = 'block';
+      break;
+  }
+}
+
+
 // enable using < > to move calendar to last month and next month
 const monthCalDateObj = new Date(curYear, curMonthNum, 1);
 document.querySelector('.js-last-month').addEventListener('click', () => {
   monthCalDateObj.setFullYear(monthCalDateObj.getFullYear(), monthCalDateObj.getMonth() - 1)
-  getDates(monthCalDateObj.getMonth());
+  getDatesQuantity(monthCalDateObj.getMonth());
   displayMonthCalendar(monthCalDateObj.getFullYear(), monthCalDateObj.getMonth(), monthCalDateObj.getDate(), monthCalDateObj.getDay());
 })
 document.querySelector('.js-next-month').addEventListener('click', () => {
   monthCalDateObj.setFullYear(monthCalDateObj.getFullYear(), monthCalDateObj.getMonth() + 1)
-  getDates(monthCalDateObj.getMonth());
+  getDatesQuantity(monthCalDateObj.getMonth());
   displayMonthCalendar(monthCalDateObj.getFullYear(), monthCalDateObj.getMonth(), monthCalDateObj.getDate(), monthCalDateObj.getDay());
 })
 
+// displayMonthCalendar(curYear, curMonthNum, curDate, curDay);
 displayMonthCalendar(curYear, curMonthNum, curDate, curDay);
 displayWeekCalendar(curYear, curMonthNum, curDate, curDay);
 displayDaySchedule(curYear, curMonthNum, curDate, curDay);
+selectCalendar();
 
 // input: month(number format) 
 // output: number of days in the month
-function getDates(year, month) {
+function getDatesQuantity(year, month) {
   let datesCurMonth = 0;
   if (month === 0 || month === 2 || month === 4 || month === 6 || month === 7 || month === 9 || month === 11) {
     datesCurMonth = 31;
@@ -50,25 +75,75 @@ function getDayOfFirst(date, day) {
   return ((day - (date % 7)) + 8) % 7
 }
 
-
-// generate calendar month and year, generate html inside the grid
 function displayMonthCalendar(year, month, date, day) {
   document.querySelector('.js-month-year').innerHTML = `${months[month]} ${year}`;
   let dateHTML = `
-  <div>Sun</div>
-  <div>Mon</div>
-  <div>Tue</div>
-  <div>Wed</div>
-  <div>Thu</div>
-  <div>Fri</div>
-  <div>Sat</div>
-  ${'<div></div>'.repeat(getDayOfFirst(date, day))}
+    <div>
+      <span>Sun</span>
+      <span>Mon</span>
+      <span>Tue</span>
+      <span>Wed</span>
+      <span>Thu</span>
+      <span>Fri</span>
+      <span>Sat</span>
+    </div>
+    <div class="js-dates-row">
   `;
-  for (let i = 1; i < (getDates(year, month) + 1); i++) {
-    dateHTML += `<div>${i}</div>`
+  for (let i = 0; i < getDayOfFirst(date, day); i++) {
+    dateHTML += `
+      <span class="js-month-calendar-date-element js-dates-${i}">&nbsp;</span>
+    `;
   }
+  for (let i = 1; i < (getDatesQuantity(year, month) + 1); i++) {
+    if ((i + getDayOfFirst(date, day)) % 7 === 0) {
+      dateHTML += `<span class="js-month-calendar-date-element js-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span></div>`;
+    } else if ((i + getDayOfFirst(date, day)) % 7 === 1) {
+      dateHTML += `<div class="js-dates-row"><span class="js-month-calendar-date-element js-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
+    } else {
+      dateHTML += `<span class="js-month-calendar-date-element js-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
+    }
+  }
+  console.log(dateHTML);
   document.querySelector('.js-dates').innerHTML = dateHTML;
+
+  // when clicking date/week in the month calendar 
+  const getWeekFromMonthDateObj = new Date();
+  function checkClick(event) {
+    getWeekFromMonthDateObj.setFullYear(monthCalDateObj.getFullYear(), monthCalDateObj.getMonth(), event.currentTarget.index * 7 + 1 - getDayOfFirst(monthCalDateObj.getDate(), monthCalDateObj.getDay()))
+    console.log(getWeekFromMonthDateObj);
+    displayWeekCalendar(getWeekFromMonthDateObj.getFullYear(), getWeekFromMonthDateObj.getMonth(), getWeekFromMonthDateObj.getDate(),getWeekFromMonthDateObj.getDay())
+    calendarSwitcher = 1;
+    selectCalendar();
+  }
+  const rows = document.querySelectorAll('.js-dates-row')
+  rows.forEach((row, index) => {
+    row.index = index;
+    row.addEventListener('click', checkClick);
+  });
+
+  const datesElements = document.querySelectorAll('.js-month-calendar-date-element');
+  datesElements.forEach((datesElement, index) => {
+    datesElement.addEventListener('mouseover', () => {
+      rows.forEach((datasElement) => {
+        datasElement.removeEventListener('click', checkClick);
+      })
+    })
+    datesElement.addEventListener('click', () => {
+      getWeekFromMonthDateObj.setFullYear(monthCalDateObj.getFullYear(),monthCalDateObj.getMonth(),index + 1 - getDayOfFirst(monthCalDateObj.getDate(),monthCalDateObj.getDay()));
+      console.log(getWeekFromMonthDateObj);
+      displayDaySchedule(getWeekFromMonthDateObj.getFullYear(),getWeekFromMonthDateObj.getMonth(),getWeekFromMonthDateObj.getDate(),getWeekFromMonthDateObj.getDay())
+      calendarSwitcher = 2;
+      selectCalendar();
+    })
+    datesElement.addEventListener('mouseout', () => {
+      rows.forEach((row, index) => {
+        row.index = index;
+        row.addEventListener('click', checkClick);
+      });
+    })
+  });
 }
+
 
 // enable using < > to move calendar to last week and next week
 const weekCalDateObj = new Date();
@@ -91,13 +166,33 @@ function displayWeekCalendar(year, month, date, day) {
   theSaturday.setFullYear(year, month, date - day + 6);
   // console.log(theSaturday);
   document.querySelector('.js-date-month-year-range').innerHTML = `${theSunday.getDate()} ${months[theSunday.getMonth()]} ${theSunday.getFullYear()} ~ ${theSaturday.getDate()} ${months[theSaturday.getMonth()]} ${theSaturday.getFullYear()}`;
-  let html = '';
-  for (let i = 0; i < 7; i ++){
-    const oneDay = new Date();
-    oneDay.setFullYear(theSunday.getFullYear(),theSunday.getMonth(),theSunday.getDate() + i);
-    html += `<th>${oneDay.getDate()}</th>`;
+  let html = `
+    <div>
+      <span>Sun</span>
+      <span>Mon</span>
+      <span>Tue</span>
+      <span>Wed</span>
+      <span>Thu</span>
+      <span>Fri</span>
+      <span>Sat</span>
+    </div>
+    <div class="js-week-calendar-row">
+  `;
+  const oneDay = new Date();
+  for (let i = 0; i < 7; i++) {
+    oneDay.setFullYear(theSunday.getFullYear(), theSunday.getMonth(), theSunday.getDate() + i);
+    html += `<span class="js-week-calendar-date-element">${oneDay.getDate()}</span>`;
   }
-  document.querySelector('.js-week-calendar-date').innerHTML = html;
+  html += `</div>`
+  document.querySelector('.js-week-calendar-dates').innerHTML = html;
+  document.querySelectorAll('.js-week-calendar-date-element').forEach((weekCalendarDateElement, index) => {
+    weekCalendarDateElement.addEventListener('click', () => {
+      oneDay.setFullYear(theSunday.getFullYear(), theSunday.getMonth(), theSunday.getDate() + index);
+      displayDaySchedule(oneDay.getFullYear(),oneDay.getMonth(),oneDay.getDate(),oneDay.getDay());
+      calendarSwitcher = 2;
+      selectCalendar();
+    })
+  })
 }
 
 
@@ -115,6 +210,6 @@ document.querySelector('.js-next-day').addEventListener('click', () => {
 })
 
 // display day schedule
-function displayDaySchedule(year, month, date, day){
+function displayDaySchedule(year, month, date, day) {
   document.querySelector('.js-day-of-day-schedule').innerHTML = `${date} ${months[month]} ${year}`;
 }
