@@ -48,24 +48,22 @@ document.querySelector('.js-next-month').addEventListener('click', () => {
 
 // displayMonthCalendar(curYear, curMonthNum, curDate, curDay);
 displayMonthCalendar(curYear, curMonthNum, curDate, curDay);
-displayWeekCalendar(curYear, curMonthNum, curDate, curDay);
-displayDaySchedule(curYear, curMonthNum, curDate, curDay);
+// displayWeekCalendar(curYear, curMonthNum, curDate, curDay);
+// displayDaySchedule(curYear, curMonthNum, curDate, curDay);
 selectCalendar('month');
 
 // input: month(number format) 
 // output: number of days in the month
 function getDatesQuantity(year, month) {
-  let datesCurMonth = 0;
   if (month === 0 || month === 2 || month === 4 || month === 6 || month === 7 || month === 9 || month === 11) {
-    datesCurMonth = 31;
+    return 31;
   } else if (month === 3 || month === 5 || month === 8 || month === 10) {
-    datesCurMonth = 30;
+    return 30;
   } else if (month === 1 && year % 4 === 0) {
-    datesCurMonth = 29;
+    return 29;
   } else if (month === 1 && year % 4 !== 0) {
-    datesCurMonth = 28;
+    return 28;
   }
-  return datesCurMonth;
 }
 
 
@@ -74,7 +72,6 @@ function getDayOfFirst(date, day) {
   return ((day - (date % 7)) + 8) % 7
 }
 
-const monthCalendarMemory = new Date();
 function displayMonthCalendar(year, month, date, day) {
   document.querySelector('.js-month-year').innerHTML = `${months[month]} ${year}`;
   let dateHTML = `
@@ -87,7 +84,7 @@ function displayMonthCalendar(year, month, date, day) {
       <span>Fri</span>
       <span>Sat</span>
     </div>
-    <div class="js-dates-row">
+    <div class="js-month-calendar-dates-row">
   `;
   for (let i = 0; i < getDayOfFirst(date, day); i++) {
     dateHTML += `
@@ -98,21 +95,15 @@ function displayMonthCalendar(year, month, date, day) {
     if ((i + getDayOfFirst(date, day)) % 7 === 0) {
       dateHTML += `<span class="js-month-calendar-date-element js-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span></div>`;
     } else if ((i + getDayOfFirst(date, day)) % 7 === 1) {
-      dateHTML += `<div class="js-dates-row"><span class="js-month-calendar-date-element js-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
+      dateHTML += `<div class="js-month-calendar-dates-row"><span class="js-month-calendar-date-element js-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
     } else {
       dateHTML += `<span class="js-month-calendar-date-element js-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
     }
   }
-  document.querySelector('.js-dates').innerHTML = dateHTML;
+  document.querySelector('.js-month-calendar-dates').innerHTML = dateHTML;
 
-  // when clicking date/week in the month calendar 
-  function clickToWeekOrDate(event) {
-    monthCalendarMemory.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate());
-    calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), event.currentTarget.index * 7 + 1 - getDayOfFirst(calendarDateObject.getDate(), calendarDateObject.getDay()))
-    console.log(calendarDateObject);
-    displayWeekCalendar(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate(), calendarDateObject.getDay())
-  }
-  const rows = document.querySelectorAll('.js-dates-row')
+
+  const rows = document.querySelectorAll('.js-month-calendar-dates-row')
   rows.forEach((row, index) => {
     row.index = index;
     row.addEventListener('click', clickToWeekOrDate);
@@ -128,7 +119,6 @@ function displayMonthCalendar(year, month, date, day) {
     datesElement.addEventListener('click', () => {
       calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), index + 1 - getDayOfFirst(calendarDateObject.getDate(), calendarDateObject.getDay()));
       displayDaySchedule(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate(), calendarDateObject.getDay())
-      console.log(calendarDateObject);
     })
     datesElement.addEventListener('mouseout', () => {
       rows.forEach((row, index) => {
@@ -138,6 +128,16 @@ function displayMonthCalendar(year, month, date, day) {
     })
   });
   selectCalendar('month');
+  displayEvents(year, month, date, year, month, getDatesQuantity(year, month), 'month');
+  console.log(calendarDateObject);
+}
+
+
+// when clicking date/week in the month calendar 
+function clickToWeekOrDate(event) {
+  calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate());
+  calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), event.currentTarget.index * 7 + 1 - getDayOfFirst(calendarDateObject.getDate(), calendarDateObject.getDay()))
+  displayWeekCalendar(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate(), calendarDateObject.getDay())
 }
 
 
@@ -157,8 +157,10 @@ document.querySelector('.js-next-week').addEventListener('click', () => {
 function displayWeekCalendar(year, month, date, day) {
   const theSunday = new Date();
   theSunday.setFullYear(year, month, date - day);
+  console.log(theSunday);
   const theSaturday = new Date();
   theSaturday.setFullYear(year, month, date - day + 6);
+  console.log(theSaturday);
   document.querySelector('.js-date-month-year-range').innerHTML = `${theSunday.getDate()} ${months[theSunday.getMonth()]} ${theSunday.getFullYear()} ~ ${theSaturday.getDate()} ${months[theSaturday.getMonth()]} ${theSaturday.getFullYear()}`;
   let html = `
     <div>
@@ -187,6 +189,7 @@ function displayWeekCalendar(year, month, date, day) {
     })
   })
   selectCalendar('week');
+  displayEvents(year, month, date, year, month, date + 7, 'week');
 }
 
 
@@ -207,19 +210,81 @@ function displayDaySchedule(year, month, date, day) {
   document.querySelector('.js-day-of-day-schedule').innerHTML = `${date} ${months[month]} ${year}`;
   calendarDateObject.setFullYear(year, month, date);
   selectCalendar('day');
+  displayEvents(year, month, date, year, month, date + 1, 'day');
 }
 
 
 // enable getting back from week to month, from day to week, from day to month
 document.querySelector('.week-to-month').addEventListener('click', () => {
-  displayMonthCalendar(monthCalendarMemory.getFullYear(), monthCalendarMemory.getMonth(), monthCalendarMemory.getDate(), monthCalendarMemory.getDay());
+  calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), 1);
+  displayMonthCalendar(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate(), calendarDateObject.getDay());
   console.log(calendarDateObject);
 })
 document.querySelector('.day-to-month').addEventListener('click', () => {
+  calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), 1);
   displayMonthCalendar(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate(), calendarDateObject.getDay());
   console.log(calendarDateObject);
 })
 document.querySelector('.day-to-week').addEventListener('click', () => {
+  calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate() - calendarDateObject.getDay());
   displayWeekCalendar(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate(), calendarDateObject.getDay());
   console.log(calendarDateObject);
 })
+
+
+// display events
+function displayEvents(year1, month1, date1, year2, month2, date2, calendar) {
+  const d = new Date();
+  d.setFullYear(year1, month1, date1);
+  d.setHours(0);
+  d.setMinutes(0);
+  d.setSeconds(0);
+  d.setMilliseconds(0);
+  let x1 = d.getTime();
+  d.setFullYear(year2, month2, date2);
+  let x2 = d.getTime();
+  let html = '';
+  theList.forEach((event) => {
+    const date = new Date(event.datetime);
+    if (x1 < event.datetime && event.datetime < x2) {
+      console.log(x1, x2, event.datetime);
+      html += `
+      ${event.name} 
+      ${String("0" + date.getDate()).slice(-2)}/${String("0" + date.getMonth() + 1).slice(-2)}/${date.getFullYear()}
+      ${date.getHours()}:${String("0" + date.getMinutes()).slice(-2)}
+      <button class="remove-button">remove</button><br>
+    `;
+    } else {
+      console.log('no event')
+    }
+  })
+  switch (calendar) {
+    case 'month':
+      document.querySelector('.month-calendar-events').innerHTML = html;
+      document.querySelector('.week-calendar-events').innerHTML = '';
+      document.querySelector('.day-schedule-events').innerHTML = '';
+      break;
+    case 'week':
+      document.querySelector('.month-calendar-events').innerHTML = '';
+      document.querySelector('.week-calendar-events').innerHTML = html;
+      document.querySelector('.day-schedule-events').innerHTML = '';
+      break;
+    case 'day':
+      document.querySelector('.month-calendar-events').innerHTML = '';
+      document.querySelector('.week-calendar-events').innerHTML = '';
+      document.querySelector('.day-schedule-events').innerHTML = html;
+      break;
+  }
+  document.querySelectorAll('.remove-button').forEach((removeButton, index) => {
+    removeButton.addEventListener('click', () => {
+      theList.splice(index, 1);
+      setTheList();
+      displayEvents(year1, month1, date1, year2, month2, date2, calendar);
+    })
+  })
+}
+
+// store theList into local storage, read theList from local storage
+function setTheList() {
+  localStorage.setItem('theList', JSON.stringify(theList));
+}

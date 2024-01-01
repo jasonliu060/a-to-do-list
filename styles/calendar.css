@@ -1,14 +1,14 @@
-.js-dates-row:hover {
+.js-month-calendar-dates-row:hover {
   padding-top: 1px;
   padding-bottom: 1px;
   background-color: blue;
 }
 
-.js-dates-row {
+.js-month-calendar-dates-row {
   background-color: lightblue;
 }
 
-.js-dates-row span{
+.js-month-calendar-dates-row span{
   padding-left: 10px;
   padding-right: 10px;
 }
