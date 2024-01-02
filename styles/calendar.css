@@ -1,27 +1,89 @@
-.js-month-calendar-dates-row:hover {
-  padding-top: 1px;
-  padding-bottom: 1px;
-  background-color: blue;
+body{
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.js-month-calendar-dates-row {
+.calendar-title{
+  font-size: 24px;
+  margin-top: 12px;
+}
+
+.calendar-range{
+  margin-top: 12px;
+}
+
+.calendar-control{
+  margin-top: 12px;
+}
+
+.calendar-dates{
+  margin-top: 12px;
+}
+
+.events{
+  margin-top: 12px;
+}
+
+.js-month-calendar-dates-row:hover,
+.js-week-calendar-dates-row:hover{
   background-color: lightblue;
 }
 
-.js-month-calendar-dates-row span{
-  padding-left: 10px;
-  padding-right: 10px;
+.js-month-calendar-dates-row,
+.js-week-calendar-dates-row,
+.js-day-schedule-dates-row,
+.js-month-calendar-dates-title,
+.js-week-calendar-dates-title,
+.js-day-schedule-dates-title{
+  width: 350px;
+  display: flex;
+  text-align: center;
 }
 
-.js-month-calendar-date-element:hover {
-  background-color: lightcoral;
+
+.js-day-schedule-dates-title span,
+.js-day-schedule-dates-row span{
+  width: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
 }
 
-/* .month-calendar {
-  display: none;
+.js-month-calendar-dates-title span,
+.js-month-calendar-dates-row span,
+.js-week-calendar-dates-title span,
+.js-week-calendar-dates-row span{
+  width: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+/* .js-month-calendar-dates-row span{
+  text-align: center;
+  width: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
 } */
 
-.js-week-calendar-row span{
-  padding-left: 10px;
-  padding-right: 10px;
+.js-month-calendar-date-element:hover,
+.js-week-calendar-date-element:hover{
+  background-color: #587b8a;
+}
+
+
+
+.js-month-calendar-date-element-next-month, .js-month-calendar-date-element-last-month{
+  color: gray;
+}
+
+.today{
+  border: 1px solid;
+  border-radius: 20px;
+  background-color: black;
+  color: #FFFFFF;
+}
+
+.event-day{
+  border: 1px dashed;
+  border-radius: 20px;
 }

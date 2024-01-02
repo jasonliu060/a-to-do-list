@@ -10,32 +10,38 @@
   <a href="./todolist.html">to do list</a>
 
   <div class="month-calendar">
-    <h1>Month Calendar</h1>
-    <button class="last-month js-last-month">&larr;</button>
-    <button class="next-month js-next-month">&rarr;</button>
-    <div class="month-year js-month-year"></div>
-    <div class="js-month-calendar-dates"></div>
-    <div class="month-calendar-events"></div>
+    <div class="calendar-title">Month Calendar</div>
+    <div class="calendar-range js-month-year"></div>
+    <div class="calendar-control"><button class="last-month js-last-month">&larr;</button>
+      <button class="next-month js-next-month">&rarr;</button>
+    </div>
+    <div class="calendar-dates js-month-calendar-dates"></div>
+    <div class="events month-calendar-events"></div>
   </div>
 
   <div class="week-calendar">
-    <h1>Week Calendar</h1>
-    <button class="last-week js-last-week">&larr;</button>
-    <button class="next-week js-next-week">&rarr;</button>
-    <button class="week-to-month">back to month</button>
-    <div class="date-month-year-range js-date-month-year-range"></div>
-    <div class="js-week-calendar-dates"></div>
-    <div class="week-calendar-events"></div>
+    <div class="calendar-title">Week Calendar</div>
+    <div class="calendar-range js-date-month-year-range"></div>
+    <div class="calendar-control">
+      <button class="last-week js-last-week">&larr;</button>
+      <button class="next-week js-next-week">&rarr;</button>
+      <button class="week-to-month">back to month</button>
+    </div>
+    <div class="calendar-dates js-week-calendar-dates"></div>
+    <div class="events week-calendar-events"></div>
   </div>
 
   <div class="day-schedule">
-    <h1>Day Schedule</h1>
-    <button class="last-day js-last-day">&larr;</button>
-    <button class="next-day js-next-day">&rarr;</button>
-    <button class="day-to-week">back to week</button>
-    <button class="day-to-month">back to month</button>
-    <div class="day-of-day-schedule js-day-of-day-schedule"></div>
-    <div class="day-schedule-events"></div>
+    <div class="calendar-title">Day Schedule</div>
+    <div class="calendar-range js-day-of-day-schedule"></div>
+    <div class="calendar-control">
+      <button class="last-day js-last-day">&larr;</button>
+      <button class="next-day js-next-day">&rarr;</button>
+      <button class="day-to-week">back to week</button>
+      <button class="day-to-month">back to month</button>
+    </div>
+    <div class="calendar-dates js-day-schedule-dates"></div>
+    <div class="events day-schedule-events"></div>
   </div>
 
 

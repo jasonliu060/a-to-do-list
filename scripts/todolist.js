@@ -13,16 +13,18 @@ const dateTimeInput = document.querySelector('.js-date-input');
 console.log(document.querySelector('.js-add-button'));
 
 // add event into theList when clicking add button
+let id = 0;
 document.querySelector('.js-add-button').addEventListener('click', () => {
   dateObj.setTime(dateTimeInput.valueAsNumber + dateObj.getTimezoneOffset() * 60000);
   console.log(dateObj);
   theList.push({
+    id: id,
     name: eventInput.value,
     datetime: dateObj.getTime()
   })
-  
   setTheList();
   displayList();
+  id++;
 })
 
 // display the events of theList
