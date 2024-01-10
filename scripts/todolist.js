@@ -2,21 +2,29 @@ const theList = JSON.parse(localStorage.getItem('theList'));
 const dateObj = new Date();
 
 console.log(theList);
-displayList();
+
 
 
 const eventInput = document.querySelector('.js-event-input');
 const dateTimeInput = document.querySelector('.js-date-input');
 // const timeInput = document.querySelector('.js-time-input');
 
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-console.log(document.querySelector('.js-add-button'));
+displayList();
+
+// console.log(document.querySelector('.js-add-button'));
 
 // add event into theList when clicking add button
 let id = 0;
 document.querySelector('.js-add-button').addEventListener('click', () => {
   dateObj.setTime(dateTimeInput.valueAsNumber + dateObj.getTimezoneOffset() * 60000);
   console.log(dateObj);
+  if (theList.length === 0) {
+    id = 0;
+  } else {
+    id = theList[theList.length - 1].id + 1;
+  }
   theList.push({
     id: id,
     name: eventInput.value,
@@ -24,7 +32,6 @@ document.querySelector('.js-add-button').addEventListener('click', () => {
   })
   setTheList();
   displayList();
-  id++;
 })
 
 // display the events of theList
@@ -35,11 +42,9 @@ function displayList() {
   } else {
     theList.forEach((event) => {
       const date = new Date(event.datetime)
+      
       html += `
-        ${event.name} 
-        ${String("0" + date.getDate()).slice(-2)}/${String("0" + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}
-        ${date.getHours()}:${String("0" + date.getMinutes()).slice(-2)}
-        <button class="remove-button">remove</button><br>
+      <div class="events-element">${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${String("0" + date.getMinutes()).slice(-2)} ${event.name} <button class="remove-button">remove</button></div>
       `;
     })
     document.querySelector('.js-to-do-list').innerHTML = html;

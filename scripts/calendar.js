@@ -56,15 +56,6 @@ selectCalendar('month');
 // input: month(number format) 
 // output: number of days in the month
 function getDatesQuantity(year, month) {
-  // if (month === 0 || month === 2 || month === 4 || month === 6 || month === 7 || month === 9 || month === 11) {
-  //   return 31;
-  // } else if (month === 3 || month === 5 || month === 8 || month === 10) {
-  //   return 30;
-  // } else if (month === 1 && year % 4 === 0) {
-  //   return 29;
-  // } else if (month === 1 && year % 4 !== 0) {
-  //   return 28;
-  // }
   const date = new Date();
   date.setFullYear(year, month + 1, 0);
   return date.getDate();
@@ -92,22 +83,22 @@ function displayMonthCalendar(year, month, date, day) {
   let lastMonthDates = getDatesQuantity(year, month - 1);
   for (let i = 0 - (getDayOfFirst(date, day)); i < 0; i++) {
     dateHTML += `
-      <span class="js-month-calendar-date-element js-month-calendar-date-element-last-month js-month-calendar-dates-${i + 1}">${lastMonthDates + i + 1}</span>
+      <span class="js-month-calendar-dates-element js-month-calendar-dates-element-last-month js-month-calendar-dates-${i + 1}">${lastMonthDates + i + 1}</span>
     `;
   }
   for (let i = 1; i < (getDatesQuantity(year, month) + 1); i++) {
     if ((i + getDayOfFirst(date, day)) % 7 === 0) {
-      dateHTML += `<span class="js-month-calendar-date-element js-month-calendar-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span></div>`;
+      dateHTML += `<span class="js-month-calendar-dates-element js-month-calendar-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span></div>`;
     } else if ((i + getDayOfFirst(date, day)) % 7 === 1) {
-      dateHTML += `<div class="js-month-calendar-dates-row"><span class="js-month-calendar-date-element js-month-calendar-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
+      dateHTML += `<div class="js-month-calendar-dates-row"><span class="js-month-calendar-dates-element js-month-calendar-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
     } else {
-      dateHTML += `<span class="js-month-calendar-date-element js-month-calendar-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
+      dateHTML += `<span class="js-month-calendar-dates-element js-month-calendar-dates-${i - 1 + getDayOfFirst(date, day)}">${i}</span>`;
     }
   }
 
   let lastWeekNextMonth = 7 - (getDayOfFirst(date, day) + getDatesQuantity(year, month)) % 7;
   for (let i = 1; i < (lastWeekNextMonth + 1); i++) {
-    dateHTML += `<span class="js-month-calendar-date-element js-month-calendar-date-element-next-month  js-month-calendar-dates-${i - 1 + getDayOfFirst(date, day) + getDatesQuantity(year, month)}">${i}</span>`;
+    dateHTML += `<span class="js-month-calendar-dates-element js-month-calendar-dates-element-next-month  js-month-calendar-dates-${i - 1 + getDayOfFirst(date, day) + getDatesQuantity(year, month)}">${i}</span>`;
   }
   document.querySelector('.js-month-calendar-dates').innerHTML = dateHTML;
 
@@ -122,7 +113,7 @@ function displayMonthCalendar(year, month, date, day) {
     row.addEventListener('click', clickToWeekOrDate);
   });
 
-  const datesElements = document.querySelectorAll('.js-month-calendar-date-element');
+  const datesElements = document.querySelectorAll('.js-month-calendar-dates-element');
   datesElements.forEach((datesElement, index) => {
     datesElement.addEventListener('mouseover', () => {
       rows.forEach((datasElement) => {
@@ -148,6 +139,7 @@ function displayMonthCalendar(year, month, date, day) {
 
 // when clicking date/week in the month calendar 
 function clickToWeekOrDate(event) {
+  // console.log(event.currentTarget);
   calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate());
   calendarDateObject.setFullYear(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), event.currentTarget.index * 7 + 1 - getDayOfFirst(calendarDateObject.getDate(), calendarDateObject.getDay()))
   displayWeekCalendar(calendarDateObject.getFullYear(), calendarDateObject.getMonth(), calendarDateObject.getDate(), calendarDateObject.getDay())
@@ -170,11 +162,11 @@ document.querySelector('.js-next-week').addEventListener('click', () => {
 function displayWeekCalendar(year, month, date, day) {
   const theSunday = new Date(year, month, date - day);
   // theSunday.setFullYear();
-  console.log(theSunday);
-  console.log(theSunday.getTime());
+  // console.log(theSunday);
+  // console.log(theSunday.getTime());
   const theSaturday = new Date(year, month, date - day + 6);
-  console.log(theSaturday);
-  console.log(theSaturday.getTime());
+  // console.log(theSaturday);
+  // console.log(theSaturday.getTime());
   // theSaturday.setFullYear(year, month, date - day + 6);
   document.querySelector('.js-date-month-year-range').innerHTML = `${theSunday.getDate()} ${months[theSunday.getMonth()]} ${theSunday.getFullYear()} ~ ${theSaturday.getDate()} ${months[theSaturday.getMonth()]} ${theSaturday.getFullYear()}`;
   let html = `
@@ -264,37 +256,43 @@ document.querySelector('.day-to-week').addEventListener('click', () => {
 
 // display events
 function displayEvents(year1, month1, date1, year2, month2, date2, calendar) {
-  theList
   const d = new Date(year1, month1, date1);
   let x1 = d.getTime();
   d.setFullYear(year2, month2, date2);
   let x2 = d.getTime();
   let html = '';
-  const displayList = []; 
+  const displayList = [];
   theList.forEach((event) => {
-    const date = new Date(event.datetime);
     if (x1 < event.datetime && event.datetime < x2) {
       displayList.push(event);
-      console.log(x1, x2, date);
-      html += `
-      ${event.name} 
-      ${String("0" + date.getDate()).slice(-2)}/${String("0" + date.getMonth() + 1).slice(-2)}/${date.getFullYear()}
-      ${date.getHours()}:${String("0" + date.getMinutes()).slice(-2)}
-      <button class="remove-button">remove</button><br>
-      `;
-      switch (calendar) {
-        case 'month':
-          document.querySelector(`.js-month-calendar-dates-${date.getDate()}`).classList.add('event-day');
-          break;
-        case 'week':
-          document.querySelector(`.js-week-calendar-dates-${date.getDate()}`).classList.add('event-day');
-          break;
-        case 'day':
-          document.querySelector(`.js-day-schedule-dates-${date.getDate()}`).classList.add('event-day');
-          break;
-      }
     } else {
       console.log('no event')
+    }
+    displayList.sort((a, b) => {
+      if (a.datetime > b.datetime) {
+        return 1;
+      } else if (a.datetime < b.datetime) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  })
+  displayList.forEach((event) => {
+    const date = new Date(event.datetime);
+    html += `<div class="month-calendar-events-element">
+    ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${String("0" + date.getMinutes()).slice(-2)} ${event.name} <button class="remove-button">remove</button><div>
+    `;
+    switch (calendar) {
+      case 'month':
+        document.querySelector(`.js-month-calendar-dates-${date.getDate()}`).classList.add('event-day');
+        break;
+      case 'week':
+        document.querySelector(`.js-week-calendar-dates-${date.getDate()}`).classList.add('event-day');
+        break;
+      case 'day':
+        document.querySelector(`.js-day-schedule-dates-${date.getDate()}`).classList.add('event-day');
+        break;
     }
   })
   switch (calendar) {
@@ -328,7 +326,11 @@ function displayEvents(year1, month1, date1, year2, month2, date2, calendar) {
           document.querySelector(`.js-day-schedule-dates-${date.getDate()}`).classList.remove('event-day');
           break;
       }
-      theList.splice(displayList[index].id, 1);
+      const theIndex = theList.findIndex(checkIndex);
+      function checkIndex(event) {
+        return event.id === displayList[index].id
+      }
+      theList.splice(theIndex, 1);
       setTheList();
       displayEvents(year1, month1, date1, year2, month2, date2, calendar);
     })

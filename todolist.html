@@ -8,13 +8,16 @@
 
 <body>
   <a href="./calendar.html">calendar</a>
-  <h1>To Do List</h1>
-  <input class="event-input js-event-input" type="text" placeholder="event">
-  <input class="date-input js-date-input" type="datetime-local">
-  <!-- <input class="time-input js-time-input" type="time"> -->
-  <button class="add-button js-add-button">Add</button>
+  <div class="title">To Do List</div>
+  <div class="add-control">
+    <input class="event-input js-event-input" type="text" placeholder="event">
+    <input class="date-input js-date-input" type="datetime-local">
+    <!-- <input class="time-input js-time-input" type="time"> -->
+    <button class="add-button js-add-button">Add</button>
+  </div>
+
   <div class="to-do-list js-to-do-list"></div>
-  
+
 
 
   <script type="module" src="scripts/todolist.js">

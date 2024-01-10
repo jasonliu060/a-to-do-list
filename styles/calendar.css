@@ -39,23 +39,17 @@ body{
   text-align: center;
 }
 
-
+.js-month-calendar-dates-title span,
+.js-month-calendar-dates-row span,
+.js-week-calendar-dates-title span,
+.js-week-calendar-dates-row span,
 .js-day-schedule-dates-title span,
 .js-day-schedule-dates-row span{
   width: 30px;
   margin-left: 10px;
   margin-right: 10px;
   text-align: center;
-}
-
-.js-month-calendar-dates-title span,
-.js-month-calendar-dates-row span,
-.js-week-calendar-dates-title span,
-.js-week-calendar-dates-row span{
-  width: 30px;
-  margin-left: 10px;
-  margin-right: 10px;
-  text-align: center;
+  border-radius: 20px;
 }
 
 /* .js-month-calendar-dates-row span{
@@ -65,14 +59,14 @@ body{
   margin-right: 10px;
 } */
 
-.js-month-calendar-date-element:hover,
-.js-week-calendar-date-element:hover{
+.js-month-calendar-dates-element:hover,
+.js-week-calendar-dates-element:hover{
   background-color: #587b8a;
 }
 
 
 
-.js-month-calendar-date-element-next-month, .js-month-calendar-date-element-last-month{
+.js-month-calendar-dates-element-next-month, .js-month-calendar-dates-element-last-month{
   color: gray;
 }
 
@@ -86,4 +80,8 @@ body{
 .event-day{
   border: 1px dashed;
   border-radius: 20px;
+}
+
+.month-calendar-events-element{
+  margin-top: 12px;
 }
